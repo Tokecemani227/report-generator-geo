@@ -1,0 +1,18 @@
+{
+  "name": "geotab-fleet-report-generator",
+  "version": "0.1.0",
+  "description": "MyGeotab Add-In that builds configurable fleet reports (first module: Device Online / Offline) and outputs a professional PDF report.",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "dev": "node dev/server.js",
+    "test": "node test/runTests.js"
+  },
+  "keywords": [
+    "geotab",
+    "mygeotab",
+    "add-in",
+    "fleet-report",
+    "kpi"
+  ]
+}

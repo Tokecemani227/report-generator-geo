@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geotab Fleet Report Generator — UI Mockup</title>
+<style>
+    :root {
+        --blue: #1976d2;
+        --blue-dark: #125ea7;
+        --blue-soft: #eaf3fc;
+        --green: #168a4b;
+        --green-soft: #e8f7ef;
+        --red: #c93636;
+        --red-soft: #fdecec;
+        --amber: #a96b00;
+        --amber-soft: #fff5df;
+        --text: #17212b;
+        --muted: #697786;
+        --border: #dfe5eb;
+        --bg: #f5f7f9;
+        --card: #ffffff;
+        --sidebar: #ffffff;
+        --shadow: 0 2px 10px rgba(24, 39, 56, .06);
+        --radius: 10px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        margin: 0;
+        font-family: Inter, "Segoe UI", Arial, sans-serif;
+        color: var(--text);
+        background: var(--bg);
+    }
+
+    button, input, select { font: inherit; }
+
+    .app {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 250px 1fr;
+    }
+
+    /* Sidebar */
+    .sidebar {
+        background: var(--sidebar);
+        border-right: 1px solid var(--border);
+        padding: 22px 14px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .brand {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 2px 10px 25px;
+    }
+
+    .brand-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 9px;
+        background: var(--blue);
+        color: white;
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+        font-size: 18px;
+    }
+
+    .brand-title {
+        font-size: 14px;
+        font-weight: 750;
+        line-height: 1.25;
+    }
+
+    .brand-sub {
+        font-size: 11px;
+        color: var(--muted);
+        margin-top: 2px;
+    }
+
+    .nav-label {
+        padding: 0 12px 8px;
+        color: #8a96a3;
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        padding: 10px 12px;
+        border-radius: 7px;
+        color: #536170;
+        font-size: 13px;
+        margin-bottom: 3px;
+        cursor: pointer;
+    }
+
+    .nav-item:hover { background: #f4f7fa; }
+    .nav-item.active {
+        background: var(--blue-soft);
+        color: var(--blue);
+        font-weight: 700;
+    }
+
+    .nav-icon {
+        width: 18px;
+        text-align: center;
+        font-size: 15px;
+    }
+
+    .sidebar-bottom {
+        margin-top: auto;
+        padding: 12px;
+        border-top: 1px solid var(--border);
+    }
+
+    .db-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 11px;
+        color: var(--muted);
+    }
+
+    .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--green);
+    }
+
+    /* Main */
+    .main {
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .topbar {
+        height: 62px;
+        background: white;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 30px;
+    }
+
+    .breadcrumb {
+        font-size: 12px;
+        color: var(--muted);
+    }
+
+    .breadcrumb strong {
+        color: var(--text);
+    }
+
+    .user-area {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        font-size: 12px;
+    }
+
+    .user-avatar {
+        width: 31px;
+        height: 31px;
+        border-radius: 50%;
+        background: #e9eef4;
+        display: grid;
+        place-items: center;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .content {
+        width: min(1220px, calc(100% - 54px));
+        margin: 0 auto;
+        padding: 28px 0 45px;
+    }
+
+    .page-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 23px;
+    }
+
+    .page-title {
+        font-size: 23px;
+        margin: 0 0 5px;
+        letter-spacing: -.02em;
+    }
+
+    .page-desc {
+        margin: 0;
+        font-size: 12px;
+        color: var(--muted);
+    }
+
+    .actions {
+        display: flex;
+        gap: 8px;
+    }
+
+    .btn {
+        border: 1px solid var(--border);
+        background: white;
+        color: #394653;
+        border-radius: 7px;
+        padding: 9px 14px;
+        font-size: 12px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    .btn:hover { background: #f7f9fb; }
+
+    .btn-primary {
+        color: white;
+        background: var(--blue);
+        border-color: var(--blue);
+    }
+
+    .btn-primary:hover { background: var(--blue-dark); }
+
+    .btn:disabled {
+        opacity: .5;
+        cursor: not-allowed;
+    }
+
+    /* Builder */
+    .section {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 17px;
+    }
+
+    .section-head {
+        padding: 17px 19px;
+        border-bottom: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .section-title {
+        font-size: 14px;
+        font-weight: 750;
+        margin: 0;
+    }
+
+    .section-note {
+        color: var(--muted);
+        font-size: 11px;
+    }
+
+    .section-body { padding: 19px; }
+
+    .grid-4 {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 13px;
+    }
+
+    .field label {
+        display: block;
+        color: #52606d;
+        font-size: 11px;
+        font-weight: 650;
+        margin-bottom: 6px;
+    }
+
+    .input, .select {
+        width: 100%;
+        border: 1px solid #d5dce3;
+        border-radius: 6px;
+        background: white;
+        padding: 9px 10px;
+        color: var(--text);
+        font-size: 12px;
+        outline: none;
+    }
+
+    .input:focus, .select:focus {
+        border-color: var(--blue);
+        box-shadow: 0 0 0 2px rgba(25,118,210,.09);
+    }
+
+    /* Modules */
+    .module-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+
+    .module {
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 15px;
+        position: relative;
+        min-height: 126px;
+        cursor: pointer;
+        transition: .15s ease;
+        background: #fff;
+    }
+
+    .module:hover {
+        border-color: #b9cde0;
+        transform: translateY(-1px);
+    }
+
+    .module.selected {
+        border: 1.5px solid var(--blue);
+        background: #fafdff;
+    }
+
+    .module.disabled {
+        opacity: .56;
+        cursor: default;
+    }
+
+    .check {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        width: 18px;
+        height: 18px;
+        border: 1px solid #cbd4dc;
+        border-radius: 5px;
+        display: grid;
+        place-items: center;
+        font-size: 11px;
+        color: white;
+    }
+
+    .module.selected .check {
+        background: var(--blue);
+        border-color: var(--blue);
+    }
+
+    .module-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 7px;
+        display: grid;
+        place-items: center;
+        background: var(--blue-soft);
+        color: var(--blue);
+        margin-bottom: 10px;
+        font-size: 14px;
+    }
+
+    .module-title {
+        font-size: 12px;
+        font-weight: 750;
+        margin-bottom: 4px;
+    }
+
+    .module-desc {
+        font-size: 10.5px;
+        line-height: 1.45;
+        color: var(--muted);
+        max-width: 90%;
+    }
+
+    .module-tag {
+        display: inline-block;
+        margin-top: 8px;
+        padding: 3px 6px;
+        border-radius: 4px;
+        background: var(--green-soft);
+        color: var(--green);
+        font-size: 9px;
+        font-weight: 700;
+    }
+
+    .module-tag.soon {
+        background: #f1f3f5;
+        color: #77818b;
+    }
+
+    /* Summary */
+    .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+    }
+
+    .metric {
+        padding: 16px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+    }
+
+    .metric-label {
+        color: var(--muted);
+        font-size: 10.5px;
+        margin-bottom: 8px;
+    }
+
+    .metric-value {
+        font-size: 25px;
+        font-weight: 760;
+        letter-spacing: -.03em;
+    }
+
+    .metric-meta {
+        margin-top: 5px;
+        font-size: 10px;
+        color: var(--muted);
+    }
+
+    .metric.online .metric-value { color: var(--green); }
+    .metric.offline .metric-value { color: var(--red); }
+
+    /* Preview */
+    .preview-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+    }
+
+    .preview-title {
+        font-size: 12px;
+        font-weight: 750;
+    }
+
+    .preview-actions {
+        display: flex;
+        gap: 7px;
+    }
+
+    .report-paper {
+        background: white;
+        border: 1px solid #d9dfe5;
+        border-radius: 4px;
+        padding: 34px 40px;
+        box-shadow: 0 4px 20px rgba(20,30,40,.06);
+    }
+
+    .report-head {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 18px;
+        border-bottom: 2px solid var(--text);
+    }
+
+    .report-name {
+        font-size: 17px;
+        font-weight: 800;
+        margin-bottom: 5px;
+    }
+
+    .report-sub {
+        font-size: 10px;
+        color: var(--muted);
+    }
+
+    .report-meta {
+        text-align: right;
+        font-size: 10px;
+        color: var(--muted);
+        line-height: 1.7;
+    }
+
+    .report-section-title {
+        margin: 22px 0 12px;
+        font-size: 13px;
+        font-weight: 800;
+    }
+
+    .report-kpis {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 19px;
+    }
+
+    .report-kpi {
+        border: 1px solid var(--border);
+        padding: 13px;
+        border-radius: 5px;
+    }
+
+    .report-kpi span {
+        display: block;
+        font-size: 9px;
+        color: var(--muted);
+        margin-bottom: 5px;
+    }
+
+    .report-kpi strong { font-size: 18px; }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 10px;
+    }
+
+    th {
+        text-align: left;
+        background: #f4f6f8;
+        color: #56616c;
+        font-weight: 750;
+    }
+
+    th, td {
+        padding: 9px 10px;
+        border-bottom: 1px solid #e5e9ed;
+    }
+
+    .status {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-weight: 700;
+        font-size: 9px;
+    }
+
+    .status-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+    }
+
+    .status.online { color: var(--green); }
+    .status.online .status-dot { background: var(--green); }
+
+    .status.offline { color: var(--red); }
+    .status.offline .status-dot { background: var(--red); }
+
+    .report-footer {
+        margin-top: 25px;
+        padding-top: 10px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        justify-content: space-between;
+        color: #8a949d;
+        font-size: 8.5px;
+    }
+
+    /* Responsive */
+    @media (max-width: 1050px) {
+        .app { grid-template-columns: 210px 1fr; }
+        .grid-4 { grid-template-columns: repeat(2, 1fr); }
+        .module-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 760px) {
+        .app { display: block; }
+        .sidebar { display: none; }
+        .content { width: calc(100% - 28px); }
+        .topbar { padding: 0 14px; }
+        .page-head { display: block; }
+        .actions { margin-top: 14px; }
+        .summary-grid { grid-template-columns: repeat(2, 1fr); }
+        .module-grid, .grid-4 { grid-template-columns: 1fr; }
+        .report-paper { padding: 20px; overflow-x: auto; }
+    }
+</style>
+</head>
+
+<body>
+<div class="app">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">GR</div>
+            <div>
+                <div class="brand-title">Fleet Report<br>Generator</div>
+                <div class="brand-sub">MyGeotab Add-In</div>
+            </div>
+        </div>
+
+        <div class="nav-label">Report</div>
+
+        <div class="nav-item active">
+            <span class="nav-icon">▦</span>
+            Report Builder
+        </div>
+
+        <div class="nav-item">
+            <span class="nav-icon">◫</span>
+            Report Preview
+        </div>
+
+        <div class="nav-label" style="margin-top:18px;">System</div>
+
+        <div class="nav-item">
+            <span class="nav-icon">⚙</span>
+            Settings
+        </div>
+
+        <div class="nav-item">
+            <span class="nav-icon">?</span>
+            Help & API Info
+        </div>
+
+        <div class="sidebar-bottom">
+            <div class="db-status">
+                <span class="dot"></span>
+                MyGeotab connected
+            </div>
+        </div>
+    </aside>
+
+    <main class="main">
+
+        <header class="topbar">
+            <div class="breadcrumb">
+                MyGeotab &nbsp;/&nbsp; <strong>Fleet Report Generator</strong>
+            </div>
+
+            <div class="user-area">
+                <span>Fleet Administrator</span>
+                <div class="user-avatar">FA</div>
+            </div>
+        </header>
+
+        <div class="content">
+
+            <div class="page-head">
+                <div>
+                    <h1 class="page-title">Report Builder</h1>
+                    <p class="page-desc">
+                        Build a fleet report by selecting the required vehicle group and KPI modules.
+                    </p>
+                </div>
+
+                <div class="actions">
+                    <button class="btn" onclick="resetReport()">Reset</button>
+                    <button class="btn btn-primary" onclick="generateReport()">Generate Report</button>
+                </div>
+            </div>
+
+            <!-- Report Parameters -->
+            <section class="section">
+                <div class="section-head">
+                    <h2 class="section-title">Report Parameters</h2>
+                    <span class="section-note">Define the scope of this report</span>
+                </div>
+
+                <div class="section-body">
+                    <div class="grid-4" style="grid-template-columns: repeat(2, minmax(220px, 1fr)); max-width: 650px;">
+                        <div class="field">
+                            <label>Vehicle Group</label>
+                            <select class="select">
+                                <option>All Groups</option>
+                                <option>Fleet Operations</option>
+                                <option>Delivery</option>
+                                <option>Management</option>
+                            </select>
+                        </div>
+
+                        <div class="field">
+                            <label>Report Date</label>
+                            <input class="input" type="date" value="2026-08-13">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Modular KPI selector -->
+            <section class="section">
+                <div class="section-head">
+                    <div>
+                        <h2 class="section-title">Report Modules</h2>
+                        <span class="section-note">Select only the KPIs required for this report</span>
+                    </div>
+                    <span class="section-note" id="moduleCount">1 module selected</span>
+                </div>
+
+                <div class="section-body">
+                    <div class="module-grid">
+
+                        <div class="module selected" data-module="device" onclick="toggleModule(this)">
+                            <div class="check">✓</div>
+                            <div class="module-icon">◉</div>
+                            <div class="module-title">Device Online / Offline</div>
+                            <div class="module-desc">
+                                Communication status and device availability summary.
+                            </div>
+                            <span class="module-tag">AVAILABLE</span>
+                        </div>
+
+                        <div class="module disabled">
+                            <div class="check"></div>
+                            <div class="module-icon">↗</div>
+                            <div class="module-title">Distance Utilization</div>
+                            <div class="module-desc">
+                                Fleet distance and utilization metrics.
+                            </div>
+                            <span class="module-tag soon">COMING NEXT</span>
+                        </div>
+
+                        <div class="module disabled">
+                            <div class="check"></div>
+                            <div class="module-icon">!</div>
+                            <div class="module-title">Top Alerts</div>
+                            <div class="module-desc">
+                                Most relevant alert/event categories for the fleet.
+                            </div>
+                            <span class="module-tag soon">COMING NEXT</span>
+                        </div>
+
+                        <div class="module disabled">
+                            <div class="check"></div>
+                            <div class="module-icon">$</div>
+                            <div class="module-title">Fuel Consumption</div>
+                            <div class="module-desc">
+                                Fuel usage and consumption analysis.
+                            </div>
+                            <span class="module-tag soon">PLANNED</span>
+                        </div>
+
+                        <div class="module disabled">
+                            <div class="check"></div>
+                            <div class="module-icon">◒</div>
+                            <div class="module-title">Idle Time</div>
+                            <div class="module-desc">
+                                Engine idle duration and fleet idle analysis.
+                            </div>
+                            <span class="module-tag soon">PLANNED</span>
+                        </div>
+
+                        <div class="module disabled">
+                            <div class="check"></div>
+                            <div class="module-icon">⌁</div>
+                            <div class="module-title">More Modules</div>
+                            <div class="module-desc">
+                                Additional KPI modules can be added without redesigning the builder.
+                            </div>
+                            <span class="module-tag soon">EXTENSIBLE</span>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Current data summary -->
+            <section class="section">
+                <div class="section-head">
+                    <h2 class="section-title">Data Summary</h2>
+                    <span class="section-note">Preview from selected module</span>
+                </div>
+
+                <div class="section-body">
+                    <div class="summary-grid">
+
+                        <div class="metric">
+                            <div class="metric-label">Total Devices</div>
+                            <div class="metric-value">128</div>
+                            <div class="metric-meta">Current report scope</div>
+                        </div>
+
+                        <div class="metric online">
+                            <div class="metric-label">Online</div>
+                            <div class="metric-value">119</div>
+                            <div class="metric-meta">92.97% of devices</div>
+                        </div>
+
+                        <div class="metric offline">
+                            <div class="metric-label">Offline</div>
+                            <div class="metric-value">9</div>
+                            <div class="metric-meta">7.03% of devices</div>
+                        </div>
+
+                        <div class="metric">
+                            <div class="metric-label">Last Data Refresh</div>
+                            <div class="metric-value" style="font-size:18px;">18:42</div>
+                            <div class="metric-meta">Status: Connected</div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+            <!-- Report Preview -->
+            <section class="section">
+                <div class="section-head">
+                    <h2 class="section-title">Report Preview</h2>
+                    <span class="section-note">What will appear in the final report</span>
+                </div>
+
+                <div class="section-body">
+
+                    <div class="preview-toolbar">
+                        <div class="preview-title">Fleet Monitoring Report</div>
+
+                        <div class="preview-actions">
+                            <button class="btn" onclick="window.print()">Print / Save PDF</button>
+                            <button class="btn btn-primary" onclick="generateReport()">Refresh Preview</button>
+                        </div>
+                    </div>
+
+                    <div class="report-paper">
+
+                        <div class="report-head">
+                            <div>
+                                <div class="report-name">Fleet Monitoring Report</div>
+                                <div class="report-sub">
+                                    Device Online / Offline
+                                </div>
+                            </div>
+
+                            <div class="report-meta">
+                                Database: Current MyGeotab Database Context<br>
+                                Reporting Date: 13 August 2026<br>
+                                Generated: 18:42
+                            </div>
+                        </div>
+
+                        <div class="report-section-title">
+                            01 &nbsp; Device Online / Offline
+                        </div>
+
+                        <div class="report-kpis">
+                            <div class="report-kpi">
+                                <span>Total Devices</span>
+                                <strong>128</strong>
+                            </div>
+
+                            <div class="report-kpi">
+                                <span>Online</span>
+                                <strong style="color:var(--green);">119</strong>
+                            </div>
+
+                            <div class="report-kpi">
+                                <span>Offline</span>
+                                <strong style="color:var(--red);">9</strong>
+                            </div>
+                        </div>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Vehicle / Device</th>
+                                    <th>Status</th>
+                                    <th>Last Communication</th>
+                                    <th>Group</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>B 1234 ABC</td>
+                                    <td>
+                                        <span class="status online">
+                                            <span class="status-dot"></span> Online
+                                        </span>
+                                    </td>
+                                    <td>18:41:52</td>
+                                    <td>Fleet Operations</td>
+                                </tr>
+
+                                <tr>
+                                    <td>2</td>
+                                    <td>B 5678 XYZ</td>
+                                    <td>
+                                        <span class="status online">
+                                            <span class="status-dot"></span> Online
+                                        </span>
+                                    </td>
+                                    <td>18:41:36</td>
+                                    <td>Fleet Operations</td>
+                                </tr>
+
+                                <tr>
+                                    <td>3</td>
+                                    <td>B 9012 DEF</td>
+                                    <td>
+                                        <span class="status offline">
+                                            <span class="status-dot"></span> Offline
+                                        </span>
+                                    </td>
+                                    <td>15:27:10</td>
+                                    <td>Delivery</td>
+                                </tr>
+
+                                <tr>
+                                    <td>4</td>
+                                    <td>B 3456 GHI</td>
+                                    <td>
+                                        <span class="status online">
+                                            <span class="status-dot"></span> Online
+                                        </span>
+                                    </td>
+                                    <td>18:40:58</td>
+                                    <td>Management</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="report-footer">
+                            <span>Generated by Geotab Fleet Report Generator</span>
+                            <span>Page 1</span>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+</div>
+
+<script>
+    function toggleModule(element) {
+        if (element.classList.contains('disabled')) return;
+
+        element.classList.toggle('selected');
+
+        const selected = document.querySelectorAll('.module.selected').length;
+        document.getElementById('moduleCount').textContent =
+            selected + (selected === 1 ? ' module selected' : ' modules selected');
+    }
+
+    function generateReport() {
+        const button = event && event.target ? event.target : null;
+
+        if (button) {
+            const original = button.textContent;
+            button.textContent = 'Generating...';
+            button.disabled = true;
+
+            setTimeout(() => {
+                button.textContent = original;
+                button.disabled = false;
+                alert('Mockup: Report generated successfully. In the real Add-In this action will call the verified MyGeotab API and build the selected report modules.');
+            }, 650);
+        }
+    }
+
+    function resetReport() {
+        document.querySelectorAll('.module.selected').forEach((module, index) => {
+            if (index > 0) module.classList.remove('selected');
+        });
+
+        document.getElementById('moduleCount').textContent = '1 module selected';
+    }
+</script>
+
+</body>
+</html>

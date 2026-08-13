@@ -1,0 +1,16 @@
+{
+  "name": "Fleet Report Generator",
+  "supportEmail": "support@example.com",
+  "version": "0.1.0",
+  "isSigned": false,
+  "items": [
+    {
+      "path": "ActivityLink/",
+      "menuName": {
+        "en": "Fleet Report Generator"
+      },
+      "svgIcon": "https://example.com/addin/icons/fleet-report-generator.svg",
+      "url": "https://example.com/addin/addin.html"
+    }
+  ]
+}
